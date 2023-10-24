@@ -1,0 +1,51 @@
+﻿<Window x:Class="Your_WareHouse.Views.NavigationPanel.FeedBackOrComplainsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        xmlns:local="clr-namespace:Your_WareHouse.Views.NavigationPanel"
+        Title="Feedback or Complaints" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="10*" />
+            <RowDefinition Height="1*" />
+            <!-- Automatically sized row for the ListBox -->
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <!-- Takes 1/4 of the width -->
+            <ColumnDefinition Width="2*" />
+            <!-- Takes half of the width -->
+            <ColumnDefinition Width="1*" />
+            <!-- Takes 1/4 of the width -->
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="1" Content="Feedback or Complaints" HorizontalContentAlignment="Center" Foreground="white" FontSize="30" Background="#80000000"/>
+        <Button Grid.Row="0" Grid.Column="2" Content="Add Feedback" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" x:Name="AddFeedbackButton" Foreground="Black" Click="AddFeedbackButton_Click"/>
+
+
+        <ScrollViewer Grid.Row="1" Grid.Column="1" Margin="0,20,0,0" VerticalScrollBarVisibility="Auto">
+            <!-- Bind the ListBox's height to the window's height -->
+            <ListBox x:Name="ListOfFeedbackOrComplaints" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <!-- Semi-transparent background -->
+                <ListBox.Background>
+                    <SolidColorBrush Color="#80000000"/>
+                </ListBox.Background>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Foreground="white" Text="{Binding Title}" FontWeight="Bold" TextWrapping="Wrap"/>
+                            <TextBlock Foreground="white" Text="{Binding Content}" TextWrapping="Wrap"/>
+                            <TextBlock Foreground="white" Text="{Binding Date}" TextWrapping="Wrap"/>
+                            <TextBlock Foreground="white" Text="{Binding Customer.Name}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+        <!-- Button for returning to the personal cabinet -->
+        <Button Grid.Row="1" Content="Back to Personal Office" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" Grid.Column="2" Click="BackToOfficeButton_Click" Foreground="Black"/>
+    </Grid>
+</Window>

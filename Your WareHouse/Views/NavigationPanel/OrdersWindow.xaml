@@ -1,0 +1,99 @@
+﻿<Window x:Class="Your_WareHouse.Views.NavigationPanel.OrdersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Your_WareHouse.Views.NavigationPanel"
+        mc:Ignorable="d"
+        Title="OrdersWindow" Height="450" Width="800">
+    <Grid>
+        <!-- Header with label and buttons -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="1" Content="Orders" HorizontalContentAlignment="Center" Foreground="white" FontSize="30" Background="#80000000"/>
+        <Button Grid.Row="0" Grid.Column="2" x:Name="Back" Content="Back" Margin="5" Click="Back_Click"/>
+        <Button Grid.Row="2" Grid.Column="2" x:Name="CreateOrderButton" Content="Create Order" Margin="5,5,5,5" Click="CreateOrderButton_Click"/>
+
+        <!-- Table with orders -->
+        <ScrollViewer Grid.Row="1" Grid.Column="1" Margin="0,20,0,0" VerticalScrollBarVisibility="Auto">
+            <!-- Header -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Labels for each column -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Good Name" Foreground="White"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="Good Number" Foreground="White"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Good Type" Foreground="White"/>
+                <TextBlock Grid.Row="0" Grid.Column="3" Text="Order Status" Foreground="White"/>
+                <TextBlock Grid.Row="0" Grid.Column="4" Text="Start Reservation" Foreground="White"/>
+                <TextBlock Grid.Row="0" Grid.Column="5" Text="End Reservation" Foreground="White"/>
+
+                <!-- Data for each column -->
+                <ListBox x:Name="ListOfOrders" Grid.Row="1" Grid.ColumnSpan="9" ScrollViewer.HorizontalScrollBarVisibility="Disabled" HorizontalContentAlignment="Stretch">
+                    <!-- Semi-transparent background -->
+                    <ListBox.Background>
+                        <SolidColorBrush Color="#80000000"/>
+                    </ListBox.Background>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="White" BorderThickness="0,0,0,1" Margin="5">
+                                <!-- Add border for cell separation -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Data for each column -->
+                                    <TextBlock Grid.Column="0" Text="{Binding GoodName}" Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding GoodNumber}" Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding GoodType}" Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding OrderStatus}" Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="4" Text="{Binding StartReservation}" Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="5" Text="{Binding EndReservation}" Foreground="White" TextWrapping="Wrap"/>
+
+                                    <!-- Buttons -->
+                                    <Button Grid.Column="6" x:Name="CancelButton" Content="Скасувати замовлення" Margin="5"  Click="CancelButton_Click"/>
+                                    <Button Grid.Column="7" x:Name="GetManagerCommentButton" Content="Коментар менеджера" Margin="5"  Click="GetManagerCommentButton_Click"/>
+                                    <Button Grid.Column="8" x:Name="GetMyCommentButton" Content="Коментар власний" Margin="5"  Click="GetMyCommentButton_Click"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>
+
+

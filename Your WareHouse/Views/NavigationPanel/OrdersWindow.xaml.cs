@@ -27,9 +27,9 @@ public partial class OrdersWindow : Window
 {
     private readonly IMapper _mapper;
 
-    private readonly Customer _myCustomer;
+    private readonly IUnitOfWork _unitOfWork;
 
-    private readonly UnitOfWork _unitOfWork;
+    private readonly Customer _myCustomer;
 
     private readonly Repository<Order> _repository;
 
@@ -37,7 +37,7 @@ public partial class OrdersWindow : Window
 
     //private OrderViewModel viewModel;
 
-    public OrdersWindow(IMapper mapper, Customer myCustomer)
+    public OrdersWindow(IMapper mapper, Customer myCustomer, IUnitOfWork unitOfWork)
     {
         InitializeComponent();
 
@@ -45,66 +45,109 @@ public partial class OrdersWindow : Window
 
         _myCustomer = myCustomer;
 
-        _unitOfWork = new(new StateDbContext());
+        _unitOfWork = unitOfWork;
 
         _repository = _unitOfWork.GetRepository<Order>();
-       // var t = _repository.GetAll().Where(Or => Or.CustomerId == _myCustomer.Id).Select(Or => _mapper.Map<OrderViewModel>(Or)).ToList();
+        // var t = _repository.GetAll().Where(Or => Or.CustomerId == _myCustomer.Id).Select(Or => _mapper.Map<OrderViewModel>(Or)).ToList();
         viewModels = _repository.GetAll().Where(Or => Or.CustomerId == _myCustomer.Id).Select(Or => _mapper.Map<OrderViewModel>(Or)).ToList();
 
         ListOfOrders.ItemsSource = viewModels;
 
-      //  DataContext = viewModel;
+        //  DataContext = viewModel;
     }
 
     private void Back_Click(object sender, RoutedEventArgs e)
     {
-        CustomerOffice office = new(_mapper, _myCustomer);
+        CustomerOffice office = new(_mapper, _myCustomer, _unitOfWork);
 
         WindowHelper.CopyAllProparityAndReplacement(office, this);
     }
 
     private void CancelButton_Click(object sender, RoutedEventArgs e)
     {
+        // Отримати вибраний елемент у ListBox (якщо є вибраний)
+        Button button = sender as Button;
         OrderViewModel selectedOrder = new();
+        if (button != null)
+        {
+            // Отримання батьківського елемента (може знадобитися приведення до відповідного типу)
+            FrameworkElement parent = button.Parent as FrameworkElement;
 
-        if (selectedOrder != null && selectedOrder.OrderStatus == StatusOrder.InQueue)
-        {
-            selectedOrder.OrderStatus = StatusOrder.Canceled;
-        
-            _repository.Update(_mapper.Map<Order>(selectedOrder));
-            _repository.Save();
-        
-            MessageBox.Show($"Canceled successfully order for GoodName: {selectedOrder.GoodName} {selectedOrder.GoodNumber} {selectedOrder.GoodType} from {selectedOrder.StartReservation} to {selectedOrder.EndReservation}");
-        }
-        
-        if (selectedOrder.OrderStatus != StatusOrder.InQueue)
-        {
-            MessageBox.Show($"Sorry, but canceling the order is not possible at the moment - the order has moved from the status \"In the queue\"");
+            // Отримання контексту елемента списку (якщо кнопка знаходиться в елементі списку ListBox)
+            selectedOrder = parent?.DataContext as OrderViewModel;
+
+            
         }
 
-        return;
+        if (selectedOrder != null)
+        {
+            // Отримати вашу логіку скасування замовлення та оновлення статусу тут
+            if (selectedOrder.OrderStatus == StatusOrder.InQueue)
+            {
+                selectedOrder.OrderStatus = StatusOrder.Canceled;
+                _repository.Update(_mapper.Map<Order>(selectedOrder));
+                _repository.Save(); // Змінилося з _repository.Save() на _unitOfWork.Save()
+
+                MessageBox.Show($"Canceled successfully order for GoodName: {selectedOrder.GoodName} {selectedOrder.GoodNumber} {selectedOrder.GoodType} from {selectedOrder.StartReservation} to {selectedOrder.EndReservation}");
+            }
+            else
+            {
+                MessageBox.Show($"Sorry, but canceling the order is not possible at the moment - the order has moved from the status \"{selectedOrder.OrderStatus}\"");
+            }
+        }
+        else
+        {
+            MessageBox.Show("Please select an order to cancel.");
+        }
     }
+
+    // Аналогічні зміни для GetManagerCommentButton_Click та GetMyCommentButton_Click
+
+
 
     private void GetManagerCommentButton_Click(object sender, RoutedEventArgs e)
     {
-        // Отримати вибраний елемент у ListBox (якщо є вибраний)
-        OrderViewModel selectedOrder = ListOfOrders.SelectedItem as OrderViewModel;
+        Button button = sender as Button;
+        OrderViewModel selectedOrder = new();
+        if (button != null)
+        {
+            // Отримання батьківського елемента (може знадобитися приведення до відповідного типу)
+            FrameworkElement parent = button.Parent as FrameworkElement;
 
-        MessageBox.Show($"Managers` comment: {selectedOrder.ManagerComment}");
+            // Отримання контексту елемента списку (якщо кнопка знаходиться в елементі списку ListBox)
+            selectedOrder = parent?.DataContext as OrderViewModel;
+
+            MessageBox.Show($"Managers` comment: {selectedOrder.ManagerComment}");
+        }
     }
 
     private void GetMyCommentButton_Click(object sender, RoutedEventArgs e)
     {
-        // Отримати вибраний елемент у ListBox (якщо є вибраний)
-        OrderViewModel selectedOrder = ListOfOrders.SelectedItem as OrderViewModel;
+        Button button = sender as Button;
+        OrderViewModel selectedOrder = new();
+        if (button != null)
+        {
+            // Отримання батьківського елемента (може знадобитися приведення до відповідного типу)
+            FrameworkElement parent = button.Parent as FrameworkElement;
 
-        MessageBox.Show($"Your comment: {selectedOrder.CustomerComment}");
+            // Отримання контексту елемента списку (якщо кнопка знаходиться в елементі списку ListBox)
+            selectedOrder = parent?.DataContext as OrderViewModel;
+
+            MessageBox.Show($"Your comment: {selectedOrder.CustomerComment}");
+
+        }
     }
 
     private void CreateOrderButton_Click(object sender, RoutedEventArgs e)
     {
-        CreatingOrderWindow creatingWindow = new(_mapper, _myCustomer);
+        CreatingOrderWindow creatingWindow = new(_mapper, _myCustomer, _unitOfWork);
 
         WindowHelper.CopyAllProparityAndReplacement(creatingWindow, this);
+    }
+
+    private void UpdatePageButton_Click(object sender, RoutedEventArgs e)
+    {
+        OrdersWindow ordersWindow =  new(_mapper, _myCustomer, _unitOfWork);
+        WindowHelper.CopyAllProparityAndReplacement(ordersWindow, this);
     }
 }

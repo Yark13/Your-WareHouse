@@ -24,33 +24,38 @@ namespace Your_WareHouse.Views.Logging
     {
         private readonly IMapper _mapper;
 
+        private readonly IUnitOfWork _unitOfWork;
+
         private readonly Repository<Customer> _repository;
 
         private CustomerViewModel viewModel;
 
-        public CustomerLogging(IMapper mapper)
+        public CustomerLogging(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
 
             viewModel = new();
+            
+            _unitOfWork = unitOfWork;
 
-            _repository = new UnitOfWork(new StateDbContext()).GetRepository<Customer>();
+            _repository = _unitOfWork.GetRepository<Customer>();
 
             InitializeComponent();
 
             this.DataContext = viewModel;
+            
         }
 
         private void BackToStart_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new(_mapper);
+            MainWindow mainWindow = new(_mapper, _unitOfWork);
 
             WindowHelper.CopyAllProparityAndReplacement(mainWindow, this);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            SignUpCustomer signUp = new(_mapper);
+            SignUpCustomer signUp = new(_mapper, _unitOfWork);
 
             WindowHelper.CopyAllProparityAndReplacement(signUp, this);
         }
@@ -70,7 +75,7 @@ namespace Your_WareHouse.Views.Logging
                 return;
             }
 
-            CustomerOffice office = new(_mapper, _mapper.Map<Customer>(_repository.Find(viewModel.Login)));
+            CustomerOffice office = new(_mapper, _mapper.Map<Customer>(_repository.Find(viewModel.Login)), _unitOfWork);
 
             WindowHelper.CopyAllProparityAndReplacement(office, this);
         }

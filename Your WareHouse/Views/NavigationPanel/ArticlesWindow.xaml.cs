@@ -27,6 +27,8 @@ public partial class ArticlesWndow : Window
 {
     private readonly IMapper _mapper;
 
+    private readonly IUnitOfWork _unitOfWork;
+
     private readonly Repository<Article> _repository;
 
     private List<ArticleViewModel> viewModels;
@@ -34,24 +36,27 @@ public partial class ArticlesWndow : Window
     private Customer _myCustomer;
 
 
-    public ArticlesWndow(IMapper mapper, Customer myCustomer)
+    public ArticlesWndow(IMapper mapper, Customer myCustomer, IUnitOfWork unitOfWork)
     {
         InitializeComponent();
 
         _mapper = mapper;
+        
+        _unitOfWork = unitOfWork;
 
-        _repository = new UnitOfWork(new StateDbContext()).GetRepository<Article>();
+        _repository = _unitOfWork.GetRepository<Article>();
 
         viewModels = _repository.GetAll().Select(el => _mapper.Map<ArticleViewModel>(el)).ToList();
 
         _myCustomer = myCustomer;
 
         ListOfArticles.ItemsSource = viewModels;
+        
     }
 
     private void BackToOfficeButtom_Click(object sender, RoutedEventArgs e)
     {
-        CustomerOffice customerOffice = new(_mapper, _myCustomer);
+        CustomerOffice customerOffice = new(_mapper, _myCustomer, _unitOfWork);
 
         WindowHelper.CopyAllProparityAndReplacement(customerOffice, this);
     }

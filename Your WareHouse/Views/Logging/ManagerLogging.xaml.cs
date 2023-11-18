@@ -27,17 +27,21 @@ namespace Your_WareHouse.Views.Logging
     {
         private readonly IMapper _mapper;
 
+        private readonly IUnitOfWork _unitOfWork;
+
         private readonly Repository<Manager> _repository;
 
         private ManagerViewModel viewModel;
 
-        public ManagerLogging(IMapper mapper)
+        public ManagerLogging(IMapper mapper, IUnitOfWork unitOfWork)
         {
             InitializeComponent();
 
             _mapper = mapper;
 
-            _repository = new UnitOfWork(new StateDbContext()).GetRepository<Manager>();
+            _unitOfWork = unitOfWork;
+
+            _repository = unitOfWork.GetRepository<Manager>();
 
             viewModel = new();
 
@@ -46,7 +50,7 @@ namespace Your_WareHouse.Views.Logging
 
         private void BackToStart_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new(_mapper);
+            MainWindow mainWindow = new(_mapper, _unitOfWork);
 
             WindowHelper.CopyAllProparityAndReplacement(mainWindow, this);
         }
@@ -68,7 +72,7 @@ namespace Your_WareHouse.Views.Logging
 
             MessageBox.Show("Authentication successful!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            MainWindow mainWindow = new(_mapper);
+            MainWindow mainWindow = new(_mapper, _unitOfWork);
 
             WindowHelper.CopyAllProparityAndReplacement(mainWindow, this);
         }

@@ -29,17 +29,17 @@ public partial class SignUpCustomer : Window
 {
     private CustomerViewModel viewModel;
 
-    private readonly UnitOfWork _unitOfWork;
+    private readonly IUnitOfWork _unitOfWork;
 
     private Repository<Customer> _repository;
 
     private readonly IMapper _mapper;
 
-    public SignUpCustomer(IMapper mapper)
+    public SignUpCustomer(IMapper mapper, IUnitOfWork unitOfWork)
     {
         InitializeComponent();
 
-        _unitOfWork = new UnitOfWork(new StateDbContext());
+        _unitOfWork = unitOfWork;
 
         _repository = _unitOfWork.GetRepository<Customer>();
 
@@ -52,7 +52,7 @@ public partial class SignUpCustomer : Window
 
     private void BackToStart_Click(object sender, RoutedEventArgs e)
     {
-        CustomerLogging customerLogging = new(_mapper);
+        CustomerLogging customerLogging = new(_mapper, _unitOfWork);
 
         WindowHelper.CopySizeAndLocationAndBackground(customerLogging, this);
 
@@ -90,7 +90,7 @@ public partial class SignUpCustomer : Window
 
         MessageBox.Show("You registered successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-        CustomerOffice office = new(_mapper, _mapper.Map<Customer>(viewModel));
+        CustomerOffice office = new(_mapper, _mapper.Map<Customer>(viewModel), _unitOfWork);
 
         WindowHelper.CopyAllProparityAndReplacement(office, this);
     }

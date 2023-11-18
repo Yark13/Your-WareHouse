@@ -20,6 +20,7 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Grid.Column="1" Content="Orders" HorizontalContentAlignment="Center" Foreground="white" FontSize="30" Background="#80000000"/>
+        <Button Grid.Row="0" Grid.Column="0" x:Name="UpdatePageButton" Content="Update page" Margin="5" Click="UpdatePageButton_Click"/>
         <Button Grid.Row="0" Grid.Column="2" x:Name="Back" Content="Back" Margin="5" Click="Back_Click"/>
         <Button Grid.Row="2" Grid.Column="2" x:Name="CreateOrderButton" Content="Create Order" Margin="5,5,5,5" Click="CreateOrderButton_Click"/>
 

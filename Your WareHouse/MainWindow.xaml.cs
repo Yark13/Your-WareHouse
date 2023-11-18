@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DataLayer.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,25 +25,28 @@ public partial class MainWindow : Window
 {
     private readonly IMapper _mapper;
 
-    public MainWindow(IMapper mapper)
+    private readonly IUnitOfWork _unitOfWork;
+
+    public MainWindow(IMapper mapper, IUnitOfWork unitOfWork)
     {
         InitializeComponent();
 
         WindowHelper.SetDefaultWindowBackground(this);
 
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
     }
 
     private void Manager_Click(object sender, RoutedEventArgs e)
     {
-        ManagerLogging managerLogging = new(_mapper);
+        ManagerLogging managerLogging = new(_mapper, _unitOfWork);
 
         WindowHelper.CopyAllProparityAndReplacement(managerLogging, this);
     }
 
     private void Customer_Click(object sender, RoutedEventArgs e)
     {
-        CustomerLogging customerLogging = new(_mapper);
+        CustomerLogging customerLogging = new(_mapper, _unitOfWork);
 
         WindowHelper.CopyAllProparityAndReplacement(customerLogging, this);
     }

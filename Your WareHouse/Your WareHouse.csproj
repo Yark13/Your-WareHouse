@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <RootNamespace>Your_WareHouse</RootNamespace>
     <Nullable>enable</Nullable>
@@ -25,9 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="DataLayer">
-      <HintPath>..\DataLayer\bin\Debug\net6.0\DataLayer.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\DataLayer\DataLayer.csproj" />
+    <ProjectReference Include="..\ServerPart\ServerPart.csproj" />
   </ItemGroup>
 
 </Project>

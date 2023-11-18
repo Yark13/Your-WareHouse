@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ServerPart\ServerPart.csproj" />
+  </ItemGroup>
+
 </Project>

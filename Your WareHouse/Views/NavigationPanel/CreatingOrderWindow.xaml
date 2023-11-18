@@ -8,7 +8,8 @@
         xmlns:enums="clr-namespace:DataLayer.Entities;assembly=DataLayer"
         mc:Ignorable="d"
         Title="CreatingOrderWindow" Height="450" Width="800"
-        TextOptions.TextFormattingMode="Ideal">
+        TextOptions.TextFormattingMode="Ideal"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -45,7 +46,7 @@
             <TextBox Grid.Column="1" x:Name="GoodNumberBox" FontSize="40" Margin="10,0,10,10" Text="{Binding GoodNumber}"/>
         </Grid>
 
-        <!--<Grid Grid.Row="3">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
@@ -54,18 +55,12 @@
                 <TextBlock Text="Good type:" FontSize="20"/>
             </Viewbox>
             <ComboBox Grid.Column="1" x:Name="GoodTypeBox" FontSize="40" Margin="10,0,10,10" 
-          SelectedValue="{Binding GoodType}" 
-          ItemsSource="{Binding Source={x:Static enums:UnitOfMeasurement}}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Converter={StaticResource enumDescriptionConverter}}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
+                  SelectedValue="{Binding GoodType}" 
+                  ItemsSource="{Binding UnitOfMeasurementValues}"
+                  DisplayMemberPath="Description"
+                  SelectedValuePath="Value">
             </ComboBox>
-
-        </Grid>-->
+        </Grid>
 
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>

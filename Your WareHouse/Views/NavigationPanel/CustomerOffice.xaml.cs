@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DataLayer.Entities;
+using DataLayer.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,41 +24,44 @@ namespace Your_WareHouse.Views.NavigationPanel
     {
         private readonly IMapper _mapper;
 
+        private readonly IUnitOfWork _unitOfWork;
+
         private Customer _myCustomer;
 
-        public CustomerOffice(IMapper mapper, Customer myCustomer)
+        public CustomerOffice(IMapper mapper, Customer myCustomer, IUnitOfWork unitOfWork)
         {
             InitializeComponent();
 
             _myCustomer = myCustomer;
 
             _mapper = mapper;
+            _unitOfWork = unitOfWork;
         }
 
         private void ExitAccountButton_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow mainWindow = new(_mapper);
+            MainWindow mainWindow = new(_mapper, _unitOfWork);
 
             WindowHelper.CopyAllProparityAndReplacement(mainWindow, this);
         }
 
         private void NewsButton_Click(object sender, RoutedEventArgs e)
         {
-            ArticlesWndow articles = new(_mapper, _myCustomer);
+            ArticlesWndow articles = new(_mapper, _myCustomer, _unitOfWork);
 
             WindowHelper.CopyAllProparityAndReplacement(articles, this);
         }
 
         private void OrdersButton_Click(object sender, RoutedEventArgs e)
         {
-            OrdersWindow ordersWindow = new(_mapper, _myCustomer);
+            OrdersWindow ordersWindow = new(_mapper, _myCustomer, _unitOfWork);
 
             WindowHelper.CopyAllProparityAndReplacement(ordersWindow, this);
         }
 
         private void FeedbackAndComplains_Click(object sender, RoutedEventArgs e)
         {
-            FeedBackOrComplainsWindow feedbackAndComplains = new(_mapper, _myCustomer);
+            FeedBackOrComplainsWindow feedbackAndComplains = new(_mapper, _myCustomer, _unitOfWork);
 
             WindowHelper.CopyAllProparityAndReplacement(feedbackAndComplains, this);
         }

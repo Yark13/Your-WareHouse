@@ -27,16 +27,16 @@ namespace Your_WareHouse.Views.NavigationPanel
     {
         private readonly IMapper _mapper;
         private Customer _customer;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly Repository<FeedbackOrComplains> _repository;
         private FeedbackOrComplainsViewModel viewModel;
 
-        public AddingNewFeedbackOrComplainsWindow(IMapper mapper, Customer myCustomer)
+        public AddingNewFeedbackOrComplainsWindow(IMapper mapper, Customer myCustomer, IUnitOfWork unitOfWork)
         {
             InitializeComponent();
             _mapper = mapper;
             _customer = myCustomer;
-            _unitOfWork = new UnitOfWork(new StateDbContext());
+            _unitOfWork = unitOfWork;
             _repository = _unitOfWork.GetRepository<FeedbackOrComplains>();
 
             viewModel = new();
@@ -46,7 +46,7 @@ namespace Your_WareHouse.Views.NavigationPanel
 
         private void ToBack_Click(object sender, RoutedEventArgs e)
         {
-            FeedBackOrComplainsWindow feedBackWindow = new(_mapper, _customer);
+            FeedBackOrComplainsWindow feedBackWindow = new(_mapper, _customer, _unitOfWork);
 
             WindowHelper.CopyAllProparityAndReplacement(feedBackWindow, this);
         }
@@ -65,7 +65,7 @@ namespace Your_WareHouse.Views.NavigationPanel
             _repository.Insert(_mapper.Map<FeedbackOrComplains>(viewModel));
             _repository.Save();
 
-            FeedBackOrComplainsWindow feedBackWindow = new(_mapper, _customer);
+            FeedBackOrComplainsWindow feedBackWindow = new(_mapper, _customer, _unitOfWork);
 
             WindowHelper.CopyAllProparityAndReplacement(feedBackWindow, this);
         }
